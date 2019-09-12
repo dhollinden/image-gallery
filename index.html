@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(loadPhotoData)
+        // end ready
+
+        function loadPhotoData() {
+            //
+            $.getJSON("data.json", filterAndDisplayPhotos);
+
+        }
+
+        function filterAndDisplayPhotos(data) {
+            const filteredPhotos = filterPhotos(data)
+            displayPhotos(filteredPhotos)
+        }
+
+        function filterPhotos(array) {
+            return array.photos.photo.filter(searchFilter)
+        }
+
+        function displayPhotos(array) {
+            let photoHTML
+            array.forEach(function(photo) {
+                photoHTML += '<div class="picbox"><figure><img src="' + photo.url_sq_cdn + '" class="frame" onclick="document.location=this.src"><figcaption>' + photo.title + '</figcaption></figure></div>';
+            }); // end each
+
+            $('#photos').html(photoHTML);
+        }
+
+        function searchFilter(photo) {
+            return photo.title.includes("Glass")
+        }
+
+
+    </script>
+</head>
+<body>
+<p>Dynamic Image binding - Ahmar</p>
+<div id="photos">starter text</div>
+</body>
+</html>
