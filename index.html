@@ -6,21 +6,36 @@
         $(document).ready(loadPhotoData)
         // end ready
 
+        let photoDataArray = []
+        let filteredPhotos = []
+        let searchTerm = ""
+
         function loadPhotoData() {
             //
-            $.getJSON("data.json", filterAndDisplayPhotos);
+            $.getJSON("data.json", function (data) {
+                photoDataArray = data.photos.photo
+                filterAndDisplayPhotos(photoDataArray)
+            });
 
         }
 
-        function filterAndDisplayPhotos(data) {
+        function filterAndDisplayPhotos(array) {
             console.log("filterAndDisplayPhotos: invoked")
-            const filteredPhotos = filterPhotos(data)
+            filteredPhotos = filterPhotos(array)
             displayPhotos(filteredPhotos)
         }
 
         function filterPhotos(array) {
             console.log("filterPhotos: invoked")
-            return array.photos.photo.filter(searchFilter)
+            return array.filter(searchFilter)
+        }
+
+        function searchFilter(photo) {
+            console.log("searchFilter: invoked")
+            if (searchTerm) {
+                return photo.title.toLowerCase().includes(searchTerm.toLowerCase())
+            }
+            return true
         }
 
         function displayPhotos(array) {
@@ -30,14 +45,18 @@
                 photoHTML += '<div class="picbox"><figure><img src="' + photo.url_sq_cdn + '" class="frame" onclick="document.location=this.src"><figcaption>' + photo.title + '</figcaption></figure></div>';
             }); // end each
 
-            console.log("displayPhotos: photoHTML = ", photoHTML)
             $('#photos').html(photoHTML);
         }
 
-        function searchFilter(photo) {
-            console.log("searchFilter: invoked")
-            return photo.title.includes("Glass")
+        function search(event) {
+            if (event.key === "Enter") {
+                searchTerm = document.getElementById("myInput").value;
+                console.log("search: Enter pressed: searchTerm = ", searchTerm)
+                filteredPhotos = filterPhotos(photoDataArray)
+                displayPhotos(filteredPhotos)
+            }
         }
+
     </script>
 
     <style>
@@ -80,7 +99,7 @@
 
 </head>
 <body>
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+<input type="text" id="myInput" onkeyup="search(event)" placeholder="Search for images.." title="Type in a name">
 <div id="photos"></div>
 </body>
 </html>
