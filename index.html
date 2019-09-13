@@ -13,32 +13,74 @@
         }
 
         function filterAndDisplayPhotos(data) {
+            console.log("filterAndDisplayPhotos: invoked")
             const filteredPhotos = filterPhotos(data)
             displayPhotos(filteredPhotos)
         }
 
         function filterPhotos(array) {
+            console.log("filterPhotos: invoked")
             return array.photos.photo.filter(searchFilter)
         }
 
         function displayPhotos(array) {
-            let photoHTML
+            console.log("displayPhotos: invoked")
+            let photoHTML = ""
             array.forEach(function(photo) {
                 photoHTML += '<div class="picbox"><figure><img src="' + photo.url_sq_cdn + '" class="frame" onclick="document.location=this.src"><figcaption>' + photo.title + '</figcaption></figure></div>';
             }); // end each
 
+            console.log("displayPhotos: photoHTML = ", photoHTML)
             $('#photos').html(photoHTML);
         }
 
         function searchFilter(photo) {
+            console.log("searchFilter: invoked")
             return photo.title.includes("Glass")
         }
-
-
     </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        #myInput {
+            background-image: url('/css/searchicon.png');
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        #myUL {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #myUL li a {
+            border: 1px solid #ddd;
+            margin-top: -1px; /* Prevent double borders */
+            background-color: #f6f6f6;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block
+        }
+
+        #myUL li a:hover:not(.header) {
+            background-color: #888;
+        }
+    </style>
+
 </head>
 <body>
-<p>Dynamic Image binding - Ahmar</p>
-<div id="photos">starter text</div>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+<div id="photos"></div>
 </body>
 </html>
