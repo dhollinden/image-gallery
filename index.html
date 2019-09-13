@@ -1,105 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(loadPhotoData)
-        // end ready
-
-        let photoDataArray = []
-        let filteredPhotos = []
-        let searchTerm = ""
-
-        function loadPhotoData() {
-            //
-            $.getJSON("data.json", function (data) {
-                photoDataArray = data.photos.photo
-                filterAndDisplayPhotos(photoDataArray)
-            });
-
-        }
-
-        function filterAndDisplayPhotos(array) {
-            console.log("filterAndDisplayPhotos: invoked")
-            filteredPhotos = filterPhotos(array)
-            displayPhotos(filteredPhotos)
-        }
-
-        function filterPhotos(array) {
-            console.log("filterPhotos: invoked")
-            return array.filter(searchFilter)
-        }
-
-        function searchFilter(photo) {
-            console.log("searchFilter: invoked")
-            if (searchTerm) {
-                return photo.title.toLowerCase().includes(searchTerm.toLowerCase())
-            }
-            return true
-        }
-
-        function displayPhotos(array) {
-            console.log("displayPhotos: invoked")
-            let photoHTML = ""
-            array.forEach(function(photo) {
-                photoHTML += '<div class="picbox"><figure><img src="' + photo.url_sq_cdn + '" class="frame" onclick="document.location=this.src"><figcaption>' + photo.title + '</figcaption></figure></div>';
-            }); // end each
-
-            $('#photos').html(photoHTML);
-        }
-
-        function search(event) {
-            if (event.key === "Enter") {
-                searchTerm = document.getElementById("myInput").value;
-                console.log("search: Enter pressed: searchTerm = ", searchTerm)
-                filteredPhotos = filterPhotos(photoDataArray)
-                displayPhotos(filteredPhotos)
-            }
-        }
-
-    </script>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        #myInput {
-            background-image: url('/css/searchicon.png');
-            background-position: 10px 12px;
-            background-repeat: no-repeat;
-            width: 100%;
-            font-size: 16px;
-            padding: 12px 20px 12px 40px;
-            border: 1px solid #ddd;
-            margin-bottom: 12px;
-        }
-
-        #myUL {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        #myUL li a {
-            border: 1px solid #ddd;
-            margin-top: -1px; /* Prevent double borders */
-            background-color: #f6f6f6;
-            padding: 12px;
-            text-decoration: none;
-            font-size: 18px;
-            color: black;
-            display: block
-        }
-
-        #myUL li a:hover:not(.header) {
-            background-color: #888;
-        }
-    </style>
-
-</head>
-<body>
-<input type="text" id="myInput" onkeyup="search(event)" placeholder="Search for images.." title="Type in a name">
-<div id="photos"></div>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>Frontend Dev Image Gallery</title>
+        <link rel='stylesheet' href='css/style.css'>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="js/image-gallery.js"></script>
+    </head>
+    <body>
+        <input type="text" id="myInput" onkeyup="search(event)" placeholder="Search for images.." title="Type in a name">
+        <div id="photos"></div>
+    </body>
 </html>
