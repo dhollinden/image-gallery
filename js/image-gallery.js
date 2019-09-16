@@ -20,17 +20,20 @@ function filterAndDisplay(array) {
 function filterBySearchTerm(array) {
     return array.filter(function (photo) {
         if (searchTerm) return photo.title.toLowerCase().includes(searchTerm.toLowerCase())
-        return true
+        return true // if no search term, return true for all photos
     })
 }
 
 function displayPhotos(array) {
     photoHTML = ""
     array.forEach(function(photo) {
-        // photoHTML += '<div class="picbox"><figure><img src="' + photo.url_sq_cdn + '" class="frame" onclick="document.location=this.src"><figcaption>' + photo.title + '</figcaption></figure></div>'
-        photoHTML += '<div class="responsive"><div class="gallery"><a target="_blank" href="' + photo.url_sq_cdn + '"><img src="' + photo.url_sq_cdn + '" onerror="imgError(this);" alt="' + photo.title + '" width="600" height="400"></a><div class="desc">' + photo.title + '</div></div></div>'
+        photoHTML += '<div class="responsive"><div class="gallery"><a target="_blank" href="' + photo.url_sq_cdn + '"><img src="' + photo.url_sq_cdn + '" onerror="imgError(this);" alt="' + photo.title + '" width="600" height="400"></a><div class="desc">' + shortTitle(photo.title) + '</div></div></div>'
     })
     $('#photos').html(photoHTML)
+}
+
+function shortTitle(title) {
+    return title.slice(0, 16) + '...'
 }
 
 function imgError(image){
