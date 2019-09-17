@@ -26,13 +26,8 @@ h1 {
     text-align: center;
 }
 
-#pagination {
+#pagination, #pagination-below {
     text-align: center;
-}
-
-#button {
-
-    w3-button w3-blue w3-small w3-round w3-padding-small"
 }
 
 

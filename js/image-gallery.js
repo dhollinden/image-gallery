@@ -50,26 +50,43 @@ function paginateButtons() {
         document.getElementById('prev').disabled = true
         document.getElementById('first').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
         document.getElementById('first').disabled = true
+        document.getElementById('prev-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
+        document.getElementById('prev-below').disabled = true
+        document.getElementById('first-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
+        document.getElementById('first-below').disabled = true
     }
     else {
         document.getElementById('prev').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
         document.getElementById('prev').disabled = false
         document.getElementById('first').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
         document.getElementById('first').disabled = false
+        document.getElementById('prev-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
+        document.getElementById('prev-below').disabled = false
+        document.getElementById('first-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
+        document.getElementById('first-below').disabled = false
     }
     if (page === numPages) {
         document.getElementById('next').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
         document.getElementById('next').disabled = true
         document.getElementById('last').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
         document.getElementById('last').disabled = true
+        document.getElementById('next-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
+        document.getElementById('next-below').disabled = true
+        document.getElementById('last-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
+        document.getElementById('last-below').disabled = true
     }
     else {
         document.getElementById('next').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
         document.getElementById('next').disabled = false
         document.getElementById('last').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
         document.getElementById('last').disabled = false
+        document.getElementById('next-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
+        document.getElementById('next-below').disabled = false
+        document.getElementById('last-below').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small'
+        document.getElementById('last-below').disabled = false
     }
     document.getElementById('pageXOfY').innerHTML = '&nbsp;&nbsp;page ' + page + ' of ' + numPages + '&nbsp;&nbsp;'
+    document.getElementById('pageXOfY-below').innerHTML = '&nbsp;&nbsp;page ' + page + ' of ' + numPages + '&nbsp;&nbsp;'
 }
 
 function displayPhotos(array) {

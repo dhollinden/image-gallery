@@ -26,10 +26,17 @@
         <hr>
         <div id="photos"></div>
 
+        <div class="clearfix"></div>
+        <div id="pagination-below">
+            <button id="first-below" onclick="toPage('first')"><em>&lt;&lt;</em></button>
+            <button id="prev-below" onclick="toPage('prev')"><em>&lt;</em></button>
+            <span id="pageXOfY-below"></span>
+            <button id="next-below" onclick="toPage('next')"><em>&gt;</em></button>
+            <button id="last-below" onclick="toPage('last')"><em>&gt;&gt;</em></button>
+        </div>
+
         <!-- The Modal -->
         <div id="myModal" class="modal">
-
-            <!-- Modal content -->
             <div class="modal-content">
                 <button id="closeModal" class="close w3-button w3-light-blue w3-large w3-round w3-padding-small" onclick="toggleModal()">&times;</button>
                 <h1 id="modal-image-title">image title</h1>
@@ -44,7 +51,6 @@
                 <button id="modal-submit" class="w3-button w3-light-blue w3-large w3-round w3-padding-small">Submit</button>
                 <button id="modal-cancel" onclick="toggleModal()" class="w3-button w3-light-blue w3-large w3-round w3-padding-small">Cancel</button>
             </div>
-
         </div>
     </body>
 </html>
