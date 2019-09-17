@@ -25,5 +25,26 @@
         </div>
         <hr>
         <div id="photos"></div>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <button id="closeModal" class="close w3-button w3-light-blue w3-large w3-round w3-padding-small" onclick="toggleModal()">&times;</button>
+                <h1 id="modal-image-title">image title</h1>
+                <hr>
+                Title: <input type="text" id="modal-title-input" placeholder="title placeholder" name="title"><br>
+                Description: <input type="text" id="modal-desc-input" placeholder="(none provided)" name="description"><br>
+                Public Domain: <input type="checkbox" id="modal-pub-domain">
+                <p id="modal-image-id">ID:</p>
+                <p id="modal-image-owner">Owner Name: </p>
+                <p id="modal-image-dimensions">Image Dimensions:</p>
+                <hr>
+                <button id="modal-submit" class="w3-button w3-light-blue w3-large w3-round w3-padding-small">Submit</button>
+                <button id="modal-cancel" onclick="toggleModal()" class="w3-button w3-light-blue w3-large w3-round w3-padding-small">Cancel</button>
+            </div>
+
+        </div>
     </body>
 </html>
