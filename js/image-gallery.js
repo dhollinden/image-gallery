@@ -9,10 +9,14 @@ let numPages = ''
 let page = 1
 
 function loadPhotoData() {
-    $.getJSON("data.json", function (data) {
-        photoArray = data.photos.photo
-        filterAndDisplay(photoArray)
-    })
+    if (localStorage.getItem("photoJSON") === null) {
+        $.getJSON("data.json", function (data) {
+            photoArray = data.photos.photo
+        })
+    } else {
+        photoArray = JSON.parse(localStorage.getItem('photoJSON'))
+    }
+    filterAndDisplay(photoArray)
 }
 
 function filterAndDisplay(array) {
@@ -146,6 +150,7 @@ function processForm(id) {
 
         }
     })
+    localStorage.setItem('photoJSON', JSON.stringify(photoArray))
     toggleModal()
     filterAndDisplay(photoArray)
 }
