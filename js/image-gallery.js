@@ -7,6 +7,7 @@ let photoHTML = ''
 let itemsPerPage = 25
 let numPages = ''
 let page = 1
+let shortTitleLength = 12
 
 function loadPhotoData() {
     if (localStorage.getItem("photoJSON") === null) {
@@ -80,8 +81,8 @@ function displayPhotos(array) {
 }
 
 function shortTitle(title) {
-    if (title.length > 16)
-        return title.slice(0, 16) + '...'
+    if (title.length > shortTitleLength)
+        return title.slice(0, shortTitleLength) + '...'
     return title
 }
 
