@@ -117,11 +117,11 @@ function toggleModal(id) {
         document.getElementById('modal-image-title').innerHTML = modalPhoto.title
         document.getElementById("modal-title-input").value = modalPhoto.title
         document.getElementById("modal-desc-input").value = modalPhoto.description._content
+        document.getElementById('modal-pd-input').checked = modalPhoto.ispublic ? true : false
         document.getElementById('modal-image-id').innerHTML = 'ID: ' + modalPhoto.id
         document.getElementById('modal-image-owner').innerHTML = 'Owner Name: ' + modalPhoto.ownername
         document.getElementById('modal-image-dimensions').innerHTML = 'Image Dimensions: ' + modalPhoto.width_l + ' x ' + modalPhoto.height_l
         document.getElementById('modal-submit').setAttribute('onclick', 'processForm(' + modalPhoto.id + ')')
-
     }
     else
         modalNode.style.display = 'none'
@@ -141,6 +141,9 @@ function processForm(id) {
     photoArray.forEach(function(photo) {
         if (photo.id == id) {
             photo.title = document.getElementById("modal-title-input").value
+            photo.description._content = document.getElementById("modal-desc-input").value
+            photo.ispublic = document.getElementById('modal-pd-input').checked ? 1 : 0
+
         }
     })
     toggleModal()
