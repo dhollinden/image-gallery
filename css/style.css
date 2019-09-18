@@ -30,7 +30,6 @@ h1 {
     text-align: center;
 }
 
-
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -51,7 +50,46 @@ h1 {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 60px;
     border: 1px solid #888;
-    width: 50%; /* Could be more or less, depending on screen size */
+    width: 40%; /* Could be more or less, depending on screen size */
+}
+/* title and description */
+#modal-inputs {
+    width: 100%;
+    vertical-align: top;
+}
+
+td {
+    vertical-align: top;
+}
+
+hr.modal-hr {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type=text] {
+    width: 100%;
+    height: 40px;
+    resize: none;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    resize: vertical;
+}
+
+textarea, input {
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+}
+
+#modal-submit, #modal-cancel {
+    float: right;
+    margin-left: 12px;
 }
 
 /* The Close Button */

@@ -183,7 +183,7 @@ function populateModal(id) {
     document.getElementById("modal-title-input").value = modalPhoto.title
     document.getElementById("modal-desc-input").value = modalPhoto.description._content
     document.getElementById('modal-pd-input').checked = modalPhoto.ispublic ? true : false
-    document.getElementById('modal-image-id').innerHTML = 'ID: ' + modalPhoto.id
+    document.getElementById('modal-image-id').innerHTML = 'Image ID: ' + modalPhoto.id
     document.getElementById('modal-image-owner').innerHTML = 'Owner Name: ' + modalPhoto.ownername
     document.getElementById('modal-image-dimensions').innerHTML = 'Image Dimensions: ' + modalPhoto.width_l + ' x ' + modalPhoto.height_l
     document.getElementById('modal-submit').setAttribute('onclick', 'processModalInput(' + modalPhoto.id + ')')
