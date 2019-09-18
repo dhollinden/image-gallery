@@ -12,16 +12,16 @@
     <body>
         <h1>Image Gallery</h1>
         <div id="search-input">
-            <input type="text" id="myInput" onkeyup="search(event)" placeholder="Search for images.." title="Type in a name">
+            <input type="text" id="myInput" onkeyup="handleSearchEvent(event)" placeholder="Search for images.." title="Type in a name">
             &nbsp;&nbsp;&nbsp;
             <span id="search-display"></span>
         </div>
         <div id="pagination">
-            <button id="first" onclick="toPage('first')"><em>&lt;&lt;</em></button>
-            <button id="prev" onclick="toPage('prev')"><em>&lt;</em></button>
+            <button id="first" onclick="handlePaginationChange('first')"><em>&lt;&lt;</em></button>
+            <button id="prev" onclick="handlePaginationChange('prev')"><em>&lt;</em></button>
             <span id="pageXOfY"></span>
-            <button id="next" onclick="toPage('next')"><em>&gt;</em></button>
-            <button id="last" onclick="toPage('last')"><em>&gt;&gt;</em></button>
+            <button id="next" onclick="handlePaginationChange('next')"><em>&gt;</em></button>
+            <button id="last" onclick="handlePaginationChange('last')"><em>&gt;&gt;</em></button>
         </div>
         <hr>
         <div id="photos"></div>

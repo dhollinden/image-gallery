@@ -1,6 +1,7 @@
 $(document).ready(loadPhotoData)
 
 let photoArray = []
+let cleanPhotoArray = []
 let filteredPhotos = []
 let searchTerm = ''
 let photoHTML = ''
@@ -9,7 +10,7 @@ let numPages = ''
 let page = 1
 let shortTitleLength = 12
 
-function loadPhotoData() {
+async function loadPhotoData() {
     if (localStorage.getItem("photoJSON") === null) {
         $.getJSON("data.json", function (data) {
             photoArray = data.photos.photo
@@ -17,34 +18,73 @@ function loadPhotoData() {
     } else {
         photoArray = JSON.parse(localStorage.getItem('photoJSON'))
     }
-    filterAndDisplay(photoArray)
+    try {
+        const temp = await cleanPhotos(photoArray)
+        cleanPhotoArray = temp
+        filterAndDisplay(cleanPhotoArray)
+    } catch (e) {
+        console.log('loadPhotoData: catch error = ', e)
+    }
+}
+
+async function cleanPhotos(array) {
+    try {
+        const temp = await remove404s(array)
+        return temp
+    } catch (e) {
+        console.log('cleanPhotos: catch error = ', e)
+    }
+}
+
+async function remove404s(array) {
+    let temp = []
+    for (photo of array) {
+        try {
+            const response = await $.ajax({
+                url: photo.url_sq_cdn,
+                type:'HEAD',
+                error: function(error)
+                {
+                    console.log('remove404s: ajax error = ', error)
+                },
+                success: function(result)
+                {
+                    console.log('remove404s: success: result = ', result)
+                    temp.push(photo)
+                }
+            });
+        } catch (e) {
+            console.log('remove404s: catch error = ',e)
+        }
+    }
+    return temp
 }
 
 function filterAndDisplay(array) {
     filteredPhotos = filterBySearchTerm(array)
-    photoPage = paginatePhotos(filteredPhotos, page)
-    displayPhotos(photoPage)
+    currentPageOfPhotos = createPageOfPhotos(filteredPhotos, page)
+    createPaginationButtons()
+    displayPhotos(currentPageOfPhotos)
 }
 
 function filterBySearchTerm(array) {
     return array.filter(function (photo) {
-        if (searchTerm) return photo.title.toLowerCase().includes(searchTerm.toLowerCase())
+        if (searchTerm)
+            return photo.title.toLowerCase().includes(searchTerm.toLowerCase())
         return true // if no search term, return true for all photos
     })
 }
 
-function paginatePhotos(array, page) {
+function createPageOfPhotos(array, page) {
     numPages = Math.ceil(array.length / itemsPerPage)
-    console.log('paginatePhotos: numPages = ', numPages)
     page = filteredPhotos.filter(function (photo, i) {
         return i >= (page - 1) * itemsPerPage && i < page * itemsPerPage
     })
     document.getElementById("search-display").innerHTML = "Displaying " + page.length + " of " + array.length  + " images"
-    paginateButtons()
     return page
 }
 
-function paginateButtons() {
+function createPaginationButtons() {
     if (page === 1) {
         document.getElementById('prev').className = 'w3-button w3-light-blue w3-small w3-round w3-padding-small w3-disabled'
         document.getElementById('prev').disabled = true
@@ -92,7 +132,7 @@ function paginateButtons() {
 function displayPhotos(array) {
     photoHTML = ""
     array.forEach(function(photo) {
-        photoHTML += '<div class="responsive"><div class="gallery" onclick="toggleModal(' + photo.id + ')"><img src="' + photo.url_sq_cdn + '" onerror="imgError(this);" alt="' + photo.title + '" width="600" height="400"><div class="desc">' + shortTitle(photo.title) + '</div></div></div>'
+        photoHTML += '<div class="responsive"><div class="gallery" onclick="toggleModal(' + photo.id + ')"><img src="' + photo.url_sq_cdn + '" alt="' + photo.title + '" width="600" height="400"><div class="desc">' + shortTitle(photo.title) + '</div></div></div>'
     })
     $('#photos').html(photoHTML)
 }
@@ -103,25 +143,21 @@ function shortTitle(title) {
     return title
 }
 
-function imgError(image){
-    image.parentElement.parentElement.style.display = 'none'
-}
-
-function search(event) {
+function handleSearchEvent(event) {
     if (event.key) {
         searchTerm = document.getElementById("myInput").value
         page = 1
         console.log("search: searchTerm = ", searchTerm)
-        filterAndDisplay(photoArray)
+        filterAndDisplay(cleanPhotoArray)
     }
 }
 
-function toPage(action) {
+function handlePaginationChange(action) {
     if (action === 'next') page += 1
     if (action === 'prev') page -= 1
     if (action === 'first') page = 1
     if (action === 'last') page = numPages
-    filterAndDisplay(photoArray)
+    filterAndDisplay(cleanPhotoArray)
 }
 
 
@@ -132,24 +168,29 @@ function toggleModal(id) {
     const modalNode = document.getElementById("myModal")
     if (modalNode.style.display === 'none' || getComputedStyle(modalNode, null).display === 'none') {
         modalNode.style.display = 'block'
-        const modalPhoto = photoPage.filter(function(photo) {
-            return parseInt(photo.id) === id
-        })[0]
-        console.log('toggleModal: modalPhoto = ', modalPhoto)
-        document.getElementById('modal-image-title').innerHTML = modalPhoto.title
-        document.getElementById("modal-title-input").value = modalPhoto.title
-        document.getElementById("modal-desc-input").value = modalPhoto.description._content
-        document.getElementById('modal-pd-input').checked = modalPhoto.ispublic ? true : false
-        document.getElementById('modal-image-id').innerHTML = 'ID: ' + modalPhoto.id
-        document.getElementById('modal-image-owner').innerHTML = 'Owner Name: ' + modalPhoto.ownername
-        document.getElementById('modal-image-dimensions').innerHTML = 'Image Dimensions: ' + modalPhoto.width_l + ' x ' + modalPhoto.height_l
-        document.getElementById('modal-submit').setAttribute('onclick', 'processForm(' + modalPhoto.id + ')')
+        populateModal(id)
     }
     else
         modalNode.style.display = 'none'
 }
 
-// if the user clicks anywhere outside of the modal-content, close the modal
+function populateModal(id) {
+    const modalPhoto = currentPageOfPhotos.filter(function(photo) {
+        return parseInt(photo.id) === id
+    })[0]
+    console.log('toggleModal: modalPhoto = ', modalPhoto)
+    document.getElementById('modal-image-title').innerHTML = modalPhoto.title
+    document.getElementById("modal-title-input").value = modalPhoto.title
+    document.getElementById("modal-desc-input").value = modalPhoto.description._content
+    document.getElementById('modal-pd-input').checked = modalPhoto.ispublic ? true : false
+    document.getElementById('modal-image-id').innerHTML = 'ID: ' + modalPhoto.id
+    document.getElementById('modal-image-owner').innerHTML = 'Owner Name: ' + modalPhoto.ownername
+    document.getElementById('modal-image-dimensions').innerHTML = 'Image Dimensions: ' + modalPhoto.width_l + ' x ' + modalPhoto.height_l
+    document.getElementById('modal-submit').setAttribute('onclick', 'processModalInput(' + modalPhoto.id + ')')
+
+}
+
+// a click outside of the modal-content div will close the modal
 window.onclick = function(event) {
     const modalNode = document.getElementById("myModal")
     if (event.target == modalNode) {
@@ -157,18 +198,17 @@ window.onclick = function(event) {
     }
 }
 
-function processForm(id) {
+function processModalInput(id) {
     console.log('processForm: invoked')
     console.log('modal-title-input = ', document.getElementById("modal-title-input").value)
-    photoArray.forEach(function(photo) {
+    cleanPhotoArray.forEach(function(photo) {
         if (photo.id == id) {
             photo.title = document.getElementById("modal-title-input").value
             photo.description._content = document.getElementById("modal-desc-input").value
             photo.ispublic = document.getElementById('modal-pd-input').checked ? 1 : 0
-
         }
     })
-    localStorage.setItem('photoJSON', JSON.stringify(photoArray))
+    localStorage.setItem('photoJSON', JSON.stringify(cleanPhotoArray))
     toggleModal()
-    filterAndDisplay(photoArray)
+    filterAndDisplay(cleanPhotoArray)
 }
